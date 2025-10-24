@@ -1,0 +1,46 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  password  String
+  budgets   Budget[]
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+model Budget {
+  id            String        @id @default(cuid())
+  namaBudget    String        @map("nama_budget")
+  total         Decimal       @db.Decimal(15, 2)
+  userId        String        @map("user_id")
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pengeluaran   Pengeluaran[]
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
+
+  @@map("budgets")
+}
+
+model Pengeluaran {
+  id               String   @id @default(cuid())
+  namaPengeluaran  String   @map("nama_pengeluaran")
+  jumlah           Decimal  @db.Decimal(15, 2)
+  tanggal          DateTime
+  budgetId         String   @map("budget_id")
+  budget           Budget   @relation(fields: [budgetId], references: [id], onDelete: Cascade)
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  @@map("pengeluaran")
+}
