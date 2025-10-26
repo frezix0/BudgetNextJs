@@ -53,16 +53,16 @@ export function useBudgets() {
   })
 
   const deleteBudget = useMutation({
-    mutationFn: async (id: string) => {
+    mutationFn: async ({ id, namaBudget }: { id: string; namaBudget: string }) => {
       const res = await fetch(`/api/budgets/${id}`, {
         method: "DELETE",
       })
       if (!res.ok) throw new Error("Gagal menghapus budget")
       return res.json()
     },
-    onSuccess: () => {
+    onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ["budgets"] })
-      showNotification("✔️ Budget berhasil dihapus!")
+      showNotification(`✔️ Budget ${variables.namaBudget} berhasil dihapus!`)
       router.push("/")
       router.refresh()
     },

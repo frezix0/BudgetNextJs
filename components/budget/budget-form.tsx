@@ -55,7 +55,10 @@ export default function BudgetForm({
     const confirmed = confirm("Apakah ingin menghapus budget ini?")
     if (confirmed) {
       try {
-        await deleteBudget.mutateAsync(budgetId)
+        await deleteBudget.mutateAsync({
+          id: budgetId,
+          namaBudget: formData.namaBudget
+        })
         onClose()
       } catch (error) {
         console.error("Error deleting budget:", error)
