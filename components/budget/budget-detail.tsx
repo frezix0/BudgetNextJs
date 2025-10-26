@@ -27,6 +27,11 @@ export default function BudgetDetail({ budget }: BudgetDetailProps) {
   )
   const sisaBudget = Number(budget.total) - totalPengeluaran
 
+  const budgetFormData = {
+    namaBudget: budget.namaBudget,
+    total: Number(budget.total)
+  }
+
   return (
     <div style={{
       width: '100%',
@@ -40,18 +45,18 @@ export default function BudgetDetail({ budget }: BudgetDetailProps) {
       {/* Back Button */}
       <button
         onClick={() => router.push("/")}
+        className="border-placeholder text-primary"
         style={{
           padding: '0.5rem 1rem',
           borderRadius: '50px',
           backgroundColor: 'rgba(255, 255, 255, 0.1)',
-          border: '1px solid rgba(217, 217, 217, 0.3)',
           display: 'flex',
           alignItems: 'center',
           gap: '0.5rem',
-          color: 'white',
           cursor: 'pointer',
-          alignSelf: 'flex-start',
-          fontSize: '0.875rem'
+          alignSelf: 'center',
+          fontSize: '0.8rem',
+          marginBottom: '1.5rem',
         }}
       >
         <ArrowLeft size={16} />
@@ -59,15 +64,17 @@ export default function BudgetDetail({ budget }: BudgetDetailProps) {
       </button>
 
       {/* Budget Card */}
-      <div style={{
-        backgroundColor: '#10214da8',
-        padding: '1rem',
-        borderRadius: '1.5rem',
-        color: 'white',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-      }}>
+      <div 
+        className="bg-primary-card"
+        style={{
+          padding: '1rem',
+          borderRadius: '1.5rem',
+          color: 'white',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center'
+        }}
+      >
         <div>
           <h2 style={{
             fontSize: '1.5rem',
@@ -91,7 +98,13 @@ export default function BudgetDetail({ budget }: BudgetDetailProps) {
           </p>
         </div>
         <button
-          onClick={() => setIsBudgetFormOpen(true)}
+          onClick={() => {
+            console.log("Opening budget form with:", {
+              budgetId: budget.id,
+              formData: budgetFormData
+            })
+            setIsBudgetFormOpen(true)
+          }}
           style={{
             padding: '1.5rem',
             background: 'none',
@@ -110,6 +123,7 @@ export default function BudgetDetail({ budget }: BudgetDetailProps) {
       {/* Add Pengeluaran Button */}
       <button
         onClick={() => setIsPengeluaranFormOpen(true)}
+        className="border-placeholder text-placeholder"
         style={{
           width: '100%',
           padding: '1rem',
@@ -119,23 +133,24 @@ export default function BudgetDetail({ budget }: BudgetDetailProps) {
           justifyContent: 'center',
           gap: '0.5rem',
           borderRadius: '1.5rem',
-          border: '2px dashed rgba(217, 217, 217, 0.5)',
+          border: '2px dashed',
           background: 'transparent',
-          color: 'rgba(217, 217, 217, 0.7)',
           cursor: 'pointer',
           transition: 'all 0.2s'
         }}
         onMouseEnter={(e) => {
-          e.currentTarget.style.borderColor = '#10214da8'
-          e.currentTarget.style.color = '#10214da8'
+          const cardColor = getComputedStyle(document.documentElement)
+            .getPropertyValue('--primary-card-bg').trim()
+          e.currentTarget.style.borderColor = cardColor
+          e.currentTarget.style.color = cardColor
         }}
         onMouseLeave={(e) => {
           e.currentTarget.style.borderColor = 'rgba(217, 217, 217, 0.5)'
           e.currentTarget.style.color = 'rgba(217, 217, 217, 0.7)'
         }}
       >
-        <Plus size={24} strokeWidth={3} />
-        <span style={{ fontSize: '1rem', fontWeight: '600' }}>
+        <Plus size={24} strokeWidth={2} />
+        <span style={{ fontSize: '1rem', fontWeight: '500' }}>
           Tambah Pengeluaran
         </span>
       </button>
@@ -155,22 +170,24 @@ export default function BudgetDetail({ budget }: BudgetDetailProps) {
         sortBy={sortBy}
       />
 
-      {/* Forms */}
-      <BudgetForm
-        isOpen={isBudgetFormOpen}
-        onClose={() => setIsBudgetFormOpen(false)}
-        budgetId={budget.id}
-        initialData={{
-          namaBudget: budget.namaBudget,
-          total: Number(budget.total),
-        }}
-      />
+      {/* Budget Form Modal */}
+      {isBudgetFormOpen && (
+        <BudgetForm
+          isOpen={isBudgetFormOpen}
+          onClose={() => setIsBudgetFormOpen(false)}
+          budgetId={budget.id}
+          initialData={budgetFormData}
+        />
+      )}
 
-      <PengeluaranForm
-        isOpen={isPengeluaranFormOpen}
-        onClose={() => setIsPengeluaranFormOpen(false)}
-        budgetId={budget.id}
-      />
+      {/* Pengeluaran Form Modal */}
+      {isPengeluaranFormOpen && (
+        <PengeluaranForm
+          isOpen={isPengeluaranFormOpen}
+          onClose={() => setIsPengeluaranFormOpen(false)}
+          budgetId={budget.id}
+        />
+      )}
     </div>
   )
 }

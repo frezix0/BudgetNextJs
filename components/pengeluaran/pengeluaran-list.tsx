@@ -24,12 +24,13 @@ export default function PengeluaranList({
 
   if (sortedPengeluaran.length === 0) {
     return (
-      <div style={{
+      <div 
+      className="border-placeholder text-placeholder"
+      style={{
         borderRadius: '1.5rem',
-        border: '1px dashed rgba(217, 217, 217, 0.3)',
+        border: '1px dashed',
         padding: '2rem',
         textAlign: 'center',
-        color: 'rgba(255, 255, 255, 0.5)'
       }}>
         <p>Belum ada pengeluaran</p>
       </div>
@@ -38,7 +39,9 @@ export default function PengeluaranList({
 
   return (
     <>
-      <div style={{
+      <div
+      className="text-primary" 
+      style={{
         width: '100%',
         display: 'flex',
         flexDirection: 'column',

@@ -64,7 +64,6 @@ export default function PengeluaranForm({
   if (!isOpen) return null
 
   return (
-    // Modal Overlay
     <div 
       style={{
         position: 'fixed',
@@ -82,31 +81,32 @@ export default function PengeluaranForm({
       }}
       onClick={onClose}
     >
-      {/* Modal Content */}
       <div 
+        className="bg-primary-bg"
         style={{
-          backgroundColor: 'rgba(255, 255, 255, 0.95)',
           width: '100%',
           maxWidth: '40rem',
           padding: '2rem',
           borderRadius: '1.5rem',
-          animation: 'slideup 0.5s ease-in-out'
+          animation: 'slideup 0.5s ease-in-out',
+          boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)'
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
         <div style={{
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
           marginBottom: '1.5rem'
         }}>
-          <h4 style={{
-            fontSize: '1.25rem',
-            fontWeight: '600',
-            color: '#31509e',
-            margin: 0
-          }}>
+          <h4 
+            className="text-primary-title"
+            style={{
+              fontSize: '1.25rem',
+              fontWeight: '600',
+              margin: 0
+            }}
+          >
             {pengeluaranId ? "Update Pengeluaran" : "Tambah Pengeluaran"}
           </h4>
           <button
@@ -123,14 +123,13 @@ export default function PengeluaranForm({
           </button>
         </div>
 
-        {/* Form */}
         <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: '1rem' }}>
             <label 
               htmlFor="namaPengeluaran"
+              className="text-secondary"
               style={{
                 display: 'block',
-                color: '#9e9e9e',
                 marginBottom: '0.5rem',
                 fontSize: '0.875rem'
               }}
@@ -143,14 +142,14 @@ export default function PengeluaranForm({
               value={formData.namaPengeluaran}
               onChange={(e) => setFormData({ ...formData, namaPengeluaran: e.target.value })}
               required
+              className="text-primary border-placeholder"
               style={{
                 width: '100%',
                 fontSize: '1.5rem',
                 padding: '1rem',
                 borderRadius: '10px',
                 backgroundColor: 'transparent',
-                border: '1px solid #d9d9d9',
-                color: '#4b4b4b',
+                border: '1px solid',
                 outline: 'none'
               }}
             />
@@ -159,9 +158,9 @@ export default function PengeluaranForm({
           <div style={{ marginBottom: '1rem' }}>
             <label 
               htmlFor="jumlah"
+              className="text-secondary"
               style={{
                 display: 'block',
-                color: '#9e9e9e',
                 marginBottom: '0.5rem',
                 fontSize: '0.875rem'
               }}
@@ -169,14 +168,16 @@ export default function PengeluaranForm({
               Jumlah Pengeluaran
             </label>
             <div style={{ position: 'relative' }}>
-              <span style={{
-                fontSize: '1.5rem',
-                position: 'absolute',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                left: '1rem',
-                color: '#9e9e9e'
-              }}>
+              <span 
+                className="text-secondary"
+                style={{
+                  fontSize: '1.5rem',
+                  position: 'absolute',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  left: '1rem'
+                }}
+              >
                 Rp
               </span>
               <input
@@ -186,14 +187,14 @@ export default function PengeluaranForm({
                 onChange={(e) => setFormData({ ...formData, jumlah: Number(e.target.value) })}
                 required
                 min="0"
+                className="text-primary border-placeholder"
                 style={{
                   width: '100%',
                   fontSize: '1.5rem',
                   padding: '1rem 1rem 1rem 3rem',
                   borderRadius: '10px',
                   backgroundColor: 'transparent',
-                  border: '1px solid #d9d9d9',
-                  color: '#4b4b4b',
+                  border: '1px solid',
                   outline: 'none'
                 }}
               />
@@ -203,9 +204,9 @@ export default function PengeluaranForm({
           <div style={{ marginBottom: '1rem' }}>
             <label 
               htmlFor="tanggal"
+              className="text-secondary"
               style={{
                 display: 'block',
-                color: '#9e9e9e',
                 marginBottom: '0.5rem',
                 fontSize: '0.875rem'
               }}
@@ -218,20 +219,19 @@ export default function PengeluaranForm({
               value={formData.tanggal}
               onChange={(e) => setFormData({ ...formData, tanggal: e.target.value })}
               required
+              className="text-primary border-placeholder"
               style={{
                 width: '100%',
                 fontSize: '1.5rem',
                 padding: '1rem',
                 borderRadius: '10px',
                 backgroundColor: 'transparent',
-                border: '1px solid #d9d9d9',
-                color: '#4b4b4b',
+                border: '1px solid',
                 outline: 'none'
               }}
             />
           </div>
 
-          {/* Action Buttons */}
           <div style={{
             display: 'flex',
             justifyContent: pengeluaranId ? 'space-between' : 'flex-end',

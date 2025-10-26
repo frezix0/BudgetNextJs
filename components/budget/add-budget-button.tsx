@@ -21,8 +21,10 @@ export default function AddBudgetButton({ onClick }: AddBudgetButtonProps) {
         justifyContent: 'center'
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.borderColor = '#10214da8'
-        e.currentTarget.style.color = '#10214da8'
+        const cardColor = getComputedStyle(document.documentElement)
+          .getPropertyValue('--primary-card-bg').trim()
+        e.currentTarget.style.borderColor = cardColor
+        e.currentTarget.style.color = cardColor
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.borderColor = 'rgba(217, 217, 217, 0.5)'

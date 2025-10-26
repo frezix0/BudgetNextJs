@@ -100,23 +100,26 @@ export default function RegisterForm() {
               height={56}
               priority
             />
-            <h1 style={{
+            <h1 
+            className="text-primary-title"
+            style={{
               fontSize: '3rem',
               fontWeight: 'bold',
-              color: 'white'
+
             }}>
               BudgetApp.
             </h1>
           </div>
-          <p style={{
+          <p 
+          className="text-secondary"
+          style={{
             fontSize: '1.125rem',
-            color: 'rgba(255, 255, 255, 0.8)'
           }}>
             Buat akun baru
           </p>
         </div>
 
-        {/* Form Card - Theme Adaptive */}
+        {/* Form Card */}
         <div style={{
           backgroundColor: 'rgba(255, 255, 255, 0.95)',
           backdropFilter: 'blur(10px)',

@@ -22,7 +22,6 @@ export const registerSchema = z.object({
   password: z.string().min(6, "Password minimal 6 karakter"),
 })
 
-// Type exports
 export type BudgetFormData = z.infer<typeof budgetSchema>
 export type PengeluaranFormData = z.infer<typeof pengeluaranSchema>
 export type LoginFormData = z.infer<typeof loginSchema>

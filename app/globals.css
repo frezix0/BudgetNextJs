@@ -64,7 +64,15 @@
   .text-secondary-title {
     color: var(--secondary-title);
   }
-  
+
+  .text-primary {
+    color: var(--primary-text);
+  }
+
+  .text-secondary {
+    color: var(--secondary);
+  }
+
   .bg-primary-card {
     background-color: var(--primary-card-bg);
   }
@@ -85,6 +93,7 @@
     background-color: var(--bg-hover);
   }
 }
+
 
 @keyframes slideup {
   from {

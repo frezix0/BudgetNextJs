@@ -35,14 +35,18 @@ export default function BudgetForm({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
-    if (budgetId) {
-      await updateBudget.mutateAsync({ id: budgetId, data: formData })
-    } else {
-      await createBudget.mutateAsync(formData)
+    try {
+      if (budgetId) {
+        await updateBudget.mutateAsync({ id: budgetId, data: formData })
+      } else {
+        await createBudget.mutateAsync(formData)
+      }
+      
+      onClose()
+      setFormData({ namaBudget: "", total: 0 })
+    } catch (error) {
+      console.error("Error submitting budget:", error)
     }
-    
-    onClose()
-    setFormData({ namaBudget: "", total: 0 })
   }
 
   const handleDelete = async () => {
@@ -50,56 +54,61 @@ export default function BudgetForm({
     
     const confirmed = confirm("Apakah ingin menghapus budget ini?")
     if (confirmed) {
-      await deleteBudget.mutateAsync(budgetId)
-      onClose()
+      try {
+        await deleteBudget.mutateAsync(budgetId)
+        onClose()
+      } catch (error) {
+        console.error("Error deleting budget:", error)
+      }
     }
   }
 
   if (!isOpen) return null
 
   return (
-    // Modal Overlay
-    <div style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: 'rgba(5, 5, 5, 0.37)',
-      backdropFilter: 'blur(10px)',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      zIndex: 50,
-      padding: '1rem'
-    }}
-    onClick={onClose}
+    <div 
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(5, 5, 5, 0.5)',
+        backdropFilter: 'blur(10px)',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 50,
+        padding: '1rem'
+      }}
+      onClick={onClose}
     >
-      {/* Modal Content */}
       <div 
+        className="bg-primary-bg"
         style={{
-          backgroundColor: 'rgb(12, 19, 41)',
           width: '100%',
           maxWidth: '40rem',
           padding: '2rem',
           borderRadius: '1.5rem',
-          animation: 'slideup 0.5s ease-in-out'
+          animation: 'slideup 0.5s ease-in-out',
+          boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)'
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
         <div style={{
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
           marginBottom: '1.5rem'
         }}>
-          <h4 style={{
-            fontSize: '1.25rem',
-            fontWeight: '600',
-            color: '#d4dbee',
-            margin: 0
-          }}>
+          <h4 
+            className="text-primary-title"
+            style={{
+              fontSize: '1.25rem',
+              fontWeight: '600',
+              margin: 0
+            }}
+          >
             {budgetId ? "Update Budget" : "Tambah Budget"}
           </h4>
           <button
@@ -116,14 +125,13 @@ export default function BudgetForm({
           </button>
         </div>
 
-        {/* Form */}
         <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: '1rem' }}>
             <label 
               htmlFor="namaBudget"
+              className="text-secondary"
               style={{
                 display: 'block',
-                color: '#9e9e9e',
                 marginBottom: '0.5rem',
                 fontSize: '0.875rem'
               }}
@@ -136,14 +144,14 @@ export default function BudgetForm({
               value={formData.namaBudget}
               onChange={(e) => setFormData({ ...formData, namaBudget: e.target.value })}
               required
+              className="text-primary border-placeholder"
               style={{
                 width: '100%',
                 fontSize: '1.5rem',
                 padding: '1rem',
                 borderRadius: '10px',
                 backgroundColor: 'transparent',
-                border: '1px solid #d9d9d9',
-                color: '#4b4b4b',
+                border: '1px solid',
                 outline: 'none'
               }}
             />
@@ -152,9 +160,9 @@ export default function BudgetForm({
           <div style={{ marginBottom: '1rem' }}>
             <label 
               htmlFor="total"
+              className="text-secondary"
               style={{
                 display: 'block',
-                color: '#9e9e9e',
                 marginBottom: '0.5rem',
                 fontSize: '0.875rem'
               }}
@@ -162,14 +170,16 @@ export default function BudgetForm({
               Jumlah Budget
             </label>
             <div style={{ position: 'relative' }}>
-              <span style={{
-                fontSize: '1.5rem',
-                position: 'absolute',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                left: '1rem',
-                color: '#9e9e9e'
-              }}>
+              <span 
+                className="text-secondary"
+                style={{
+                  fontSize: '1.5rem',
+                  position: 'absolute',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  left: '1rem'
+                }}
+              >
                 Rp
               </span>
               <input
@@ -179,21 +189,20 @@ export default function BudgetForm({
                 onChange={(e) => setFormData({ ...formData, total: Number(e.target.value) })}
                 required
                 min="0"
+                className="text-primary border-placeholder"
                 style={{
                   width: '100%',
                   fontSize: '1.5rem',
                   padding: '1rem 1rem 1rem 3rem',
                   borderRadius: '10px',
                   backgroundColor: 'transparent',
-                  border: '1px solid #d9d9d9',
-                  color: '#4b4b4b',
+                  border: '1px solid',
                   outline: 'none'
                 }}
               />
             </div>
           </div>
 
-          {/* Action Buttons */}
           <div style={{
             display: 'flex',
             justifyContent: budgetId ? 'space-between' : 'flex-end',
@@ -203,6 +212,7 @@ export default function BudgetForm({
               <button
                 type="button"
                 onClick={handleDelete}
+                disabled={deleteBudget.isPending}
                 style={{
                   width: '4rem',
                   height: '4rem',
@@ -211,10 +221,11 @@ export default function BudgetForm({
                   color: '#f24949',
                   border: '2px solid #f24949',
                   borderRadius: '10px',
-                  cursor: 'pointer',
+                  cursor: deleteBudget.isPending ? 'not-allowed' : 'pointer',
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center'
+                  justifyContent: 'center',
+                  opacity: deleteBudget.isPending ? 0.5 : 1
                 }}
               >
                 <Trash2 size={20} />
@@ -230,7 +241,7 @@ export default function BudgetForm({
                 backgroundColor: '#31509e',
                 border: 'none',
                 color: 'white',
-                cursor: 'pointer',
+                cursor: (createBudget.isPending || updateBudget.isPending) ? 'not-allowed' : 'pointer',
                 opacity: (createBudget.isPending || updateBudget.isPending) ? 0.6 : 1
               }}
             >

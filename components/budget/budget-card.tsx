@@ -20,12 +20,12 @@ export default function BudgetCard({ budget }: BudgetCardProps) {
   return (
     <div
       onClick={() => router.push(`/budget/${budget.id}`)}
+      className="bg-primary-card"
       style={{
-        backgroundColor: '#10214da8',
         width: '100%',
         padding: '1rem',
         borderRadius: '1.5rem',
-        color: 'white',
+        color: '#fefefe',
         cursor: 'pointer',
         transition: 'opacity 0.2s',
         minHeight: '120px'

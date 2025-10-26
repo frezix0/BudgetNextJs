@@ -4,24 +4,68 @@ import { useNotificationStore } from "@/hooks/use-notification"
 import { X } from "lucide-react"
 
 export default function Notification() {
-    const { notifications, removeNotification } = useNotificationStore()
+  const { notifications, removeNotification } = useNotificationStore()
 
-    return (
-        <div className="fixed top-0 z-50 flex w-full flex-col items-center gap-2 p-4">
-            {notifications.map((notification) => (
-                <div
-                    key={notification.id}
-                    className="flex items-center gap-2 rounded-xl border border-placeholder bg-white/70 px-4 py-3 backdrop-blur-lg animate-slidedown dark:bg-gray-800/70"
-                >
-                    <span className="text-sm font-medium">{notification.message}</span>
-                    <button
-                        onClick={() => removeNotification(notification.id)}
-                        className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-                    >
-                        <X className="h-4 w-4" />
-                    </button>
-                </div>
-            ))}
+  return (
+    <div style={{
+      position: 'fixed',
+      top: '1rem',
+      left: '50%',
+      transform: 'translateX(-50%)',
+      zIndex: 999,
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      gap: '0.5rem',
+      pointerEvents: 'none'
+    }}>
+      {notifications.map((notification) => (
+        <div
+          key={notification.id}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.75rem',
+            borderRadius: '12px',
+            border: '1px solid rgba(217, 217, 217, 0.3)',
+            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+            backdropFilter: 'blur(10px)',
+            padding: '0.75rem 1.25rem',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+            animation: 'slidedown 0.3s ease-out',
+            pointerEvents: 'auto',
+            minWidth: '300px',
+            justifyContent: 'space-between'
+          }}
+        >
+          <span style={{ 
+            fontSize: '0.875rem', 
+            fontWeight: '500',
+            color: '#1a1a1a',
+            flex: 1
+          }}>
+            {notification.message}
+          </span>
+          <button
+            onClick={() => removeNotification(notification.id)}
+            style={{
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              color: '#666',
+              padding: '0.25rem',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'color 0.2s'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.color = '#000'}
+            onMouseLeave={(e) => e.currentTarget.style.color = '#666'}
+          >
+            <X size={16} />
+          </button>
         </div>
-    )
+      ))}
+    </div>
+  )
 }

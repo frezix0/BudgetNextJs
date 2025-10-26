@@ -22,37 +22,48 @@ export default function PengeluaranCard({
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '1rem',
-        borderBottom: '1px solid rgba(217, 217, 217, 0.2)',
+        borderBottom: '0.25px solid var(--placeholder)',
         cursor: 'pointer',
         transition: 'background-color 0.2s',
-        backgroundColor: 'transparent'
       }}
-      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.05)'}
-      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+      onMouseEnter={(e) => {
+        const cardColor = getComputedStyle(document.documentElement)
+          .getPropertyValue('--bg-hover').trim()
+        e.currentTarget.style.backgroundColor = cardColor
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.backgroundColor = 'transparent'
+      }}
     >
       <div>
-        <h4 style={{
-          fontSize: '1.125rem',
-          fontWeight: '600',
-          color: 'white',
-          marginBottom: '0.25rem'
-        }}>
+        <h4 
+          className="text-primary-text"
+          style={{
+            fontSize: '1.125rem',
+            fontWeight: '600',
+            marginBottom: '0.25rem'
+          }}
+        >
           {pengeluaran.namaPengeluaran}
         </h4>
-        <p style={{
-          fontSize: '0.875rem',
-          color: 'rgba(255, 255, 255, 0.7)'
-        }}>
+        <p 
+          className="text-secondary"
+          style={{
+            fontSize: '0.875rem'
+          }}
+        >
           {format(new Date(pengeluaran.tanggal), "d MMMM yyyy", { locale: id })}
         </p>
       </div>
       <div>
-        <p style={{
-          fontSize: '1.25rem',
-          fontWeight: '700',
-          color: 'white',
-          textAlign: 'right'
-        }}>
+        <p 
+          className="text-primary-text"
+          style={{
+            fontSize: '1.25rem',
+            fontWeight: '700',
+            textAlign: 'right'
+          }}
+        >
           {formatRupiah(Number(pengeluaran.jumlah))}
         </p>
       </div>

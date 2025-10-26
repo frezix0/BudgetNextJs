@@ -72,17 +72,19 @@ export default function LoginForm() {
               height={56}
               priority
             />
-            <h1 style={{
+            <h1 
+            className="text-primary-title"
+            style={{
               fontSize: '3rem',
               fontWeight: 'bold',
-              color: 'white'
             }}>
               BudgetApp.
             </h1>
           </div>
-          <p style={{
+          <p 
+          className="text-secondary"
+          style={{
             fontSize: '1.125rem',
-            color: 'rgba(255, 255, 255, 0.8)'
           }}>
             Masuk ke akun Anda
           </p>
