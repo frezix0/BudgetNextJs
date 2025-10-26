@@ -1,36 +1,118 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 💰 BudgetApp
 
-## Getting Started
+Aplikasi manajemen anggaran pribadi yang **sederhana dan modern**, dibangun menggunakan **Next.js** dan **PostgreSQL**.  
+BudgetApp membantu Anda mencatat pengeluaran, mengelola anggaran, dan memantau keuangan dengan mudah dalam satu tempat.
 
-First, run the development server:
+---
+
+## 🚀 Fitur Utama
+
+- 🔐 **Autentikasi Pengguna**  
+  Pendaftaran dan login aman menggunakan **NextAuth.js (Credentials Provider)**.
+
+- 📊 **Manajemen Anggaran (Budget)**  
+  Fungsionalitas **CRUD (Create, Read, Update, Delete)** untuk mengelola pos-pos anggaran Anda.
+
+- 💸 **Manajemen Pengeluaran (Expense)**  
+  Catat dan kelola setiap transaksi yang terhubung ke pos anggaran tertentu.
+
+- ⚡ **Ringkasan Cepat**  
+  Menampilkan **sisa anggaran dan total anggaran** dalam format Rupiah (IDR).
+
+- 📅 **Penyortiran Pengeluaran**  
+  Urutkan daftar pengeluaran berdasarkan **tanggal, nama, atau jumlah**.
+
+- 🌙 **Mode Gelap/Terang**  
+  Tema yang dapat diganti untuk pengalaman pengguna yang nyaman di berbagai kondisi cahaya.
+
+- 🔔 **Notifikasi Instan**  
+  Sistem notifikasi menggunakan **Zustand** untuk umpan balik aksi pengguna secara real-time.
+
+---
+
+## 🧩 Tumpukan Teknologi (Tech Stack)
+
+| Kategori | Teknologi |
+|-----------|------------|
+| **Frontend Framework** | Next.js 14 (App Router) |
+| **Bahasa Pemrograman** | TypeScript |
+| **Database** | PostgreSQL |
+| **ORM** | Prisma |
+| **Autentikasi** | NextAuth.js |
+| **Manajemen Data Asinkron** | TanStack Query |
+| **Manajemen State Lokal** | Zustand |
+| **Styling** | Tailwind CSS |
+| **Ikon** | Lucide React |
+
+---
+
+## ⚙️ Memulai Proyek
+
+Ikuti langkah-langkah berikut untuk menjalankan proyek **BudgetApp** secara lokal.
+
+### 📦 Prasyarat
+
+Pastikan Anda telah menginstal:
+- [Node.js](https://nodejs.org/) (versi sesuai dengan `package.json`)
+- [PostgreSQL](https://www.postgresql.org/)
+- [Git](https://git-scm.com/)
+
+---
+
+### 🧠 1. Instalasi
+
+Clone repositori dan instal dependensi:
+
+```bash
+git clone https://github.com/frezix0/budgetnextjs/BudgetNextJs-main.git
+cd BudgetNextJs-main
+npm install
+# atau
+yarn install
+# atau
+pnpm install
+```
+
+### 🧩 2. Konfigurasi Lingkungan
+
+Buat file .env.local di root proyek dan tambahkan variabel lingkungan berikut:
+
+```bash
+Ganti dengan string koneksi database PostgreSQL Anda
+DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE?schema=public"
+
+Ganti dengan secret acak yang kuat (misalnya hasil dari: openssl rand -base64 32)
+NEXTAUTH_SECRET="YOUR_NEXTAUTH_SECRET"
+```
+
+### 🗄️ 3. Setup Database
+
+Jalankan migrasi Prisma dan seeding data awal:
+
+```bash
+Terapkan skema database
+npx prisma migrate dev --name init
+
+Isi database dengan data demo (opsional)
+npm run prisma:seed
+```
+
+Data demo mencakup satu akun pengguna:
+
+Email: demo@budgetapp.com
+Password: password123
+
+### 🖥️ 4. Menjalankan Aplikasi
+
+Jalankan server pengembangan:
 
 ```bash
 npm run dev
-# or
+# atau
 yarn dev
-# or
+# atau
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Aplikasi akan berjalan di:
+👉 http://localhost:3000
