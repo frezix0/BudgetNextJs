@@ -11,9 +11,9 @@ type NotificationStore = {
     removeNotification: (id: string) => void
 }
 
-export const useNotificationStore = create((set) => ({
+export const useNotificationStore = create<NotificationStore>((set) => ({
     notifications: [],
-    addNotification: (message) => {
+    addNotification: (message: string) => {
         const id = Date.now().toString()
         set((state) => ({
             notifications: [...state.notifications, { id, message }],
@@ -24,7 +24,7 @@ export const useNotificationStore = create((set) => ({
             }))
         }, 4000)
     },
-    removeNotification: (id) =>
+    removeNotification: (id: string) =>
         set((state) => ({
             notifications: state.notifications.filter((n) => n.id !== id),
     })),
