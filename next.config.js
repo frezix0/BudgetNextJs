@@ -5,11 +5,6 @@ const nextConfig = {
     domains: [], // Tambahkan domain jika perlu load image dari external
     remotePatterns: [],
   },
-  
-  // Experimental features (optional)
-  experimental: {
-    serverActions: true,
-  },
 }
 
 module.exports = nextConfig

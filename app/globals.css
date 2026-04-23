@@ -26,6 +26,11 @@
   --auth-muted: #6b7280;
   --auth-error-bg: #fee2e2;
   --auth-error-text: #c0392b;
+
+  --toast-bg: rgba(255, 255, 255, 0.95);
+  --toast-border: rgba(217, 217, 217, 0.6);
+  --toast-text: #1a1a1a;
+  --toast-muted: #6b7280;
 }
 
 .dark {
@@ -48,6 +53,11 @@
   --auth-muted: #9ca3af;
   --auth-error-bg: rgba(185, 28, 28, 0.25);
   --auth-error-text: #fca5a5;
+
+  --toast-bg: rgba(16, 33, 77, 0.92);
+  --toast-border: rgba(148, 163, 184, 0.25);
+  --toast-text: #e5e7eb;
+  --toast-muted: #9ca3af;
 }
 
 @layer base {

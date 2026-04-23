@@ -1,11 +1,11 @@
 "use client"
-
+ 
 import { useNotificationStore } from "@/hooks/use-notification"
 import { X } from "lucide-react"
-
+ 
 export default function Notification() {
   const { notifications, removeNotification } = useNotificationStore()
-
+ 
   return (
     <div style={{
       position: 'fixed',
@@ -27,8 +27,8 @@ export default function Notification() {
             alignItems: 'center',
             gap: '0.75rem',
             borderRadius: '12px',
-            border: '1px solid rgba(217, 217, 217, 0.3)',
-            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+            border: '1px solid var(--toast-border)',
+            backgroundColor: 'var(--toast-bg)',
             backdropFilter: 'blur(10px)',
             padding: '0.75rem 1.25rem',
             boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
@@ -38,10 +38,10 @@ export default function Notification() {
             justifyContent: 'space-between'
           }}
         >
-          <span style={{ 
-            fontSize: '0.875rem', 
+          <span style={{
+            fontSize: '0.875rem',
             fontWeight: '500',
-            color: '#1a1a1a',
+            color: 'var(--toast-text)',
             flex: 1
           }}>
             {notification.message}
@@ -52,15 +52,15 @@ export default function Notification() {
               background: 'none',
               border: 'none',
               cursor: 'pointer',
-              color: '#666',
+              color: 'var(--toast-muted)',
               padding: '0.25rem',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               transition: 'color 0.2s'
             }}
-            onMouseEnter={(e) => e.currentTarget.style.color = '#000'}
-            onMouseLeave={(e) => e.currentTarget.style.color = '#666'}
+            onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--toast-text)')}
+            onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--toast-muted)')}
           >
             <X size={16} />
           </button>

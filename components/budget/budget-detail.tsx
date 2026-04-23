@@ -99,10 +99,6 @@ export default function BudgetDetail({ budget }: BudgetDetailProps) {
         </div>
         <button
           onClick={() => {
-            console.log("Opening budget form with:", {
-              budgetId: budget.id,
-              formData: budgetFormData
-            })
             setIsBudgetFormOpen(true)
           }}
           style={{

@@ -20,7 +20,7 @@ export default function PengeluaranList({
 }: PengeluaranListProps) {
   const [editingPengeluaran, setEditingPengeluaran] = useState<Pengeluaran | null>(null)
 
-  const sortedPengeluaran = sortPengeluaran([...pengeluaran], sortBy)
+  const sortedPengeluaran = sortPengeluaran(pengeluaran, sortBy)
 
   if (sortedPengeluaran.length === 0) {
     return (

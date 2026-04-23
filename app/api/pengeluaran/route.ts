@@ -1,22 +1,32 @@
 import { NextRequest, NextResponse } from "next/server"
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { pengeluaranSchema } from "@/lib/validations"
+import { getCurrentUserId } from "@/lib/session"
 
 export async function POST(request: NextRequest) {
     try {
-        const session = await getServerSession(authOptions)
-        
-        if (!session) {
+        const userId = await getCurrentUserId()
+        if (!userId) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
         }
 
         const body = await request.json()
         const { budgetId, tanggal, ...rest } = body
+
+        if (!budgetId || typeof budgetId !== "string") {
+            return NextResponse.json({ error: "budgetId is required" }, { status: 400 })
+        }
         
         // Validate the data
         const validatedData = pengeluaranSchema.parse({ tanggal, ...rest })
+
+        const budget = await prisma.budget.findFirst({
+            where: { id: budgetId, userId },
+            select: { id: true },
+        })
+        if (!budget) {
+            return NextResponse.json({ error: "Budget not found" }, { status: 404 })
+        }
 
         const pengeluaran = await prisma.pengeluaran.create({
             data: {
