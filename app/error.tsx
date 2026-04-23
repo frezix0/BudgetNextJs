@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect } from "react"
+import { useRouter } from "next/navigation"
 
 export default function Error({
     error,
@@ -9,6 +10,8 @@ export default function Error({
     error: Error & { digest?: string }
     reset: () => void
 }) {
+    const router = useRouter();
+
     useEffect(() => {
         console.error(error)
     }, [error])
@@ -78,32 +81,9 @@ export default function Error({
                     Maaf, terjadi kesalahan saat memuat halaman. Silakan coba lagi.
                 </p>
 
-                {/* Error Details */}
-                {process.env.NODE_ENV === 'development' && (
-                    <div style={{
-                        backgroundColor: 'var(--bg-hover)',
-                        border: '1px solid var(--placeholder)',
-                        borderRadius: '0.75rem',
-                        padding: '1rem',
-                        marginBottom: '2rem',
-                        textAlign: 'left',
-                        maxHeight: '200px',
-                        overflow: 'auto'
-                    }}>
-                        <p style={{
-                            fontSize: '0.875rem',
-                            color: 'var(--danger)',
-                            fontFamily: 'monospace',
-                            wordBreak: 'break-word'
-                        }}>
-                            {error.message}
-                        </p>
-                    </div>
-                )}
-
                 {/* Action Button */}
                 <button
-                    onClick={reset}
+                    onClick={() => router.back()}
                     style={{
                         padding: '1rem 2.5rem',
                         fontSize: '1rem',
