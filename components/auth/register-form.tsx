@@ -6,6 +6,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { signIn } from "next-auth/react"
 import AuthInput from "./auth-input"
+import { AlertCircle } from "lucide-react"
 
 export default function RegisterForm() {
   const router = useRouter()
@@ -162,6 +163,10 @@ export default function RegisterForm() {
         }}>
           {error && (
             <div style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "0.35rem",
               backgroundColor: 'var(--auth-error-bg)',
               color: 'var(--auth-error-text)',
               padding: '1rem',
@@ -169,6 +174,7 @@ export default function RegisterForm() {
               marginBottom: '1.5rem',
               fontSize: '0.875rem'
             }}>
+              <AlertCircle size={14} style={{ flexShrink: 0 }} />
               {error}
             </div>
           )}
