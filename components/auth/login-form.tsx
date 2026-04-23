@@ -5,11 +5,16 @@ import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
+import AuthInput from "./auth-input"
 
 export default function LoginForm() {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
+  const [fieldErrors, setFieldErrors] = useState({ 
+    email: "", 
+    password: "" 
+  })
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -18,6 +23,29 @@ export default function LoginForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
+    setFieldErrors({ email: "", password: "" })
+
+    let hasError = false
+    const newFieldErrors = { email: "", password: "" }
+
+    if (!formData.email) {
+      newFieldErrors.email = "Email wajib diisi"
+      hasError = true
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newFieldErrors.email = "Format email tidak valid"
+      hasError = true
+    }
+
+    if (!formData.password) {
+      newFieldErrors.password = "Password wajib diisi"
+      hasError = true
+    }
+
+    if (hasError) {
+      setFieldErrors(newFieldErrors)
+      return
+    }
+
     setIsLoading(true)
 
     try {
@@ -28,13 +56,13 @@ export default function LoginForm() {
       })
 
       if (result?.error) {
-        setError("Email atau password salah")
+        setError("Login gagal. Email atau password salah")
       } else {
         router.push("/")
         router.refresh()
       }
     } catch (error) {
-      setError("Terjadi kesalahan. Silakan coba lagi.")
+      setError("Terjadi kesalahan sistem. Silakan coba lagi.")
     } finally {
       setIsLoading(false)
     }
@@ -92,17 +120,17 @@ export default function LoginForm() {
 
         {/* Form Card */}
         <div style={{
-          backgroundColor: 'rgba(255, 255, 255, 0.95)',
+          backgroundColor: 'var(--auth-card-bg)',
           backdropFilter: 'blur(10px)',
-          border: '1px solid rgba(255, 255, 255, 0.2)',
+          border: '1px solid var(--auth-card-border)',
           borderRadius: '1.5rem',
           padding: '2.5rem',
-          boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)'
+          boxShadow: 'var(--auth-card-shadow)'
         }}>
           {error && (
             <div style={{
-              backgroundColor: '#fee',
-              color: '#c33',
+              backgroundColor: 'var(--auth-error-bg)',
+              color: 'var(--auth-error-text)',
               padding: '1rem',
               borderRadius: '0.75rem',
               marginBottom: '1.5rem',
@@ -111,96 +139,34 @@ export default function LoginForm() {
               {error}
             </div>
           )}
-
-          <form onSubmit={handleSubmit}>
-            <div style={{ marginBottom: '1.5rem' }}>
-              <label 
-                htmlFor="email"
-                style={{
-                  display: 'block',
-                  marginBottom: '0.5rem',
-                  fontSize: '0.875rem',
-                  fontWeight: '600',
-                  color: '#374151'
-                }}
-              >
-                Email
-              </label>
-              <input
-                id="email"
-                type="email"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                placeholder="nama@email.com"
-                required
-                style={{
-                  width: '100%',
-                  padding: '0.875rem 1rem',
-                  fontSize: '1rem',
-                  border: '2px solid #e5e7eb',
-                  borderRadius: '0.75rem',
-                  backgroundColor: '#f9fafb',
-                  color: '#111827',
-                  outline: 'none',
-                  transition: 'all 0.2s'
-                }}
-                onFocus={(e) => {
-                  e.target.style.borderColor = '#31509e'
-                  e.target.style.backgroundColor = 'white'
-                  e.target.style.boxShadow = '0 0 0 3px rgba(49, 80, 158, 0.1)'
-                }}
-                onBlur={(e) => {
-                  e.target.style.borderColor = '#e5e7eb'
-                  e.target.style.backgroundColor = '#f9fafb'
-                  e.target.style.boxShadow = 'none'
-                }}
-              />
-            </div>
-
-            <div style={{ marginBottom: '1.5rem' }}>
-              <label 
-                htmlFor="password"
-                style={{
-                  display: 'block',
-                  marginBottom: '0.5rem',
-                  fontSize: '0.875rem',
-                  fontWeight: '600',
-                  color: '#374151'
-                }}
-              >
-                Password
-              </label>
-              <input
-                id="password"
-                type="password"
-                value={formData.password}
-                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                placeholder="••••••••"
-                required
-                style={{
-                  width: '100%',
-                  padding: '0.875rem 1rem',
-                  fontSize: '1rem',
-                  border: '2px solid #e5e7eb',
-                  borderRadius: '0.75rem',
-                  backgroundColor: '#f9fafb',
-                  color: '#111827',
-                  outline: 'none',
-                  transition: 'all 0.2s'
-                }}
-                onFocus={(e) => {
-                  e.target.style.borderColor = '#31509e'
-                  e.target.style.backgroundColor = 'white'
-                  e.target.style.boxShadow = '0 0 0 3px rgba(49, 80, 158, 0.1)'
-                }}
-                onBlur={(e) => {
-                  e.target.style.borderColor = '#e5e7eb'
-                  e.target.style.backgroundColor = '#f9fafb'
-                  e.target.style.boxShadow = 'none'
-                }}
-              />
-            </div>
-
+ 
+          <form onSubmit={handleSubmit} noValidate>
+            <AuthInput
+              label="Email"
+              id="email"
+              type="email"
+              value={formData.email}
+              onChange={(e) => {
+                setFormData({ ...formData, email: e.target.value })
+                if (fieldErrors.email) setFieldErrors({ ...fieldErrors, email: "" })
+              }}
+              placeholder="nama@email.com"
+              error={fieldErrors.email}
+            />
+ 
+            <AuthInput
+              label="Password"
+              id="password"
+              type="password"
+              value={formData.password}
+              onChange={(e) => {
+                setFormData({ ...formData, password: e.target.value })
+                if (fieldErrors.password) setFieldErrors({ ...fieldErrors, password: "" })
+              }}
+              placeholder="••••••••"
+              error={fieldErrors.password}
+            />
+ 
             <button
               type="submit"
               disabled={isLoading}
@@ -235,20 +201,20 @@ export default function LoginForm() {
               {isLoading ? "Memproses..." : "Masuk"}
             </button>
           </form>
-
+ 
           <div style={{
             marginTop: '2rem',
             textAlign: 'center'
           }}>
             <p style={{
               fontSize: '0.875rem',
-              color: '#6b7280'
+              color: 'var(--auth-muted)'
             }}>
               Belum punya akun?{" "}
-              <Link 
+              <Link
                 href="/register"
                 style={{
-                  color: '#31509e',
+                  color: '#2a4585',
                   fontWeight: '700',
                   textDecoration: 'none'
                 }}
