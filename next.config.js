@@ -10,6 +10,8 @@ const nextConfig = {
   experimental: {
     serverActions: true,
   },
+
+  output: 'standalone', // Enable standalone build for deployment
 }
 
 module.exports = nextConfig
