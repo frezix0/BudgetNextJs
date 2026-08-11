@@ -1,7 +1,6 @@
-import { getServerSession } from "next-auth"
 import { redirect, notFound } from "next/navigation"
-import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { getCurrentUserId } from "@/lib/session"
 import BudgetDetail from "@/components/budget/budget-detail"
 import Header from "@/components/layout/header"
 
@@ -20,9 +19,9 @@ export default async function BudgetDetailPage({
 }: {
     params: { id: string }
 }) {
-    const session = await getServerSession(authOptions)
-    
-    if (!session) {
+    const userId = await getCurrentUserId()
+ 
+    if (!userId) {
         redirect("/login")
     }
 
@@ -36,15 +35,6 @@ export default async function BudgetDetailPage({
     })
 
     if (!budget) {
-        notFound()
-    }
-
-    // Check if budget belongs to user
-    const user = await prisma.user.findUnique({
-        where: { email: session.user!.email! },
-    })
-
-    if (budget.userId !== user?.id) {
         notFound()
     }
 

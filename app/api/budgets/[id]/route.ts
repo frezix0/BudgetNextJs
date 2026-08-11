@@ -1,22 +1,21 @@
 import { NextRequest, NextResponse } from "next/server"
-import { getServerSession } from "next-auth"
 import { prisma } from "@/lib/prisma"
 import { budgetSchema } from "@/lib/validations"
-import { authOptions } from "@/lib/auth"
+import { getCurrentUserId } from "@/lib/session"
+import { ZodError } from "zod"
 
 export async function GET(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getServerSession(authOptions)
-    
-    if (!session?.user?.email) {
+    const userId = await getCurrentUserId()
+    if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
     const budget = await prisma.budget.findUnique({
-      where: { id: params.id },
+      where: { id: params.id, userId },
       include: { pengeluaran: true },
     })
 
@@ -36,30 +35,34 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getServerSession(authOptions)
-    
-    if (!session?.user?.email) {
+    const userId = await getCurrentUserId()
+    if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
     const body = await request.json()
-    
     const validatedData = budgetSchema.parse(body)
 
-    const budget = await prisma.budget.update({
-      where: { id: params.id },
-      data: {
-        namaBudget: validatedData.namaBudget,
-        total: validatedData.total,
-      },
+    const result = await prisma.budget.updateMany({
+      where: { id: params.id, userId },
+      data: validatedData,
     })
+ 
+    if (result.count === 0) {
+      return NextResponse.json(
+        { error: "Budget not found" }, 
+        { status: 404 }
+      )
+    }
+ 
+    const budget = await prisma.budget.findUnique({ where: { id: params.id } })
 
 
     return NextResponse.json(budget)
   } catch (error: any) {
     console.error("PUT budget error:", error)
     
-    if (error.name === "ZodError") {
+    if (error instanceof ZodError) {
       return NextResponse.json(
         { error: "Data tidak valid", details: error.errors },
         { status: 400 }
@@ -71,19 +74,22 @@ export async function PUT(
 }
 
 export async function DELETE(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getServerSession(authOptions)
-    
-    if (!session?.user?.email) {
+    const userId = await getCurrentUserId()
+    if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    await prisma.budget.delete({
-      where: { id: params.id },
+    const result = await prisma.budget.deleteMany({
+      where: { id: params.id, userId },
     })
+ 
+    if (result.count === 0) {
+      return NextResponse.json({ error: "Budget not found" }, { status: 404 })
+    }
 
     return NextResponse.json({ success: true })
   } catch (error: any) {

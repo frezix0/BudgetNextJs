@@ -1,27 +1,17 @@
 import { NextRequest, NextResponse } from "next/server"
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { budgetSchema } from "@/lib/validations"
+import { getCurrentUserId } from "@/lib/session"
 
 export async function GET() {
     try {
-        const session = await getServerSession(authOptions)
-        
-        if (!session) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-        }
-
-        const user = await prisma.user.findUnique({
-            where: { email: session.user!.email! },
-        })
-
-        if (!user) {
-            return NextResponse.json({ error: "User not found" }, { status: 404 })
+        const userId = await getCurrentUserId()
+        if(!userId) {
+            return NextResponse.json ({ error: "Unauthorized" }, { status: 401 })
         }
 
         const budgets = await prisma.budget.findMany({
-            where: { userId: user.id },
+            where: { userId },
             include: { 
                 pengeluaran: {
                     orderBy: { tanggal: "desc" }
@@ -41,18 +31,9 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
     try {
-        const session = await getServerSession(authOptions)
-        
-        if (!session) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-        }
-
-        const user = await prisma.user.findUnique({
-            where: { email: session.user!.email! },
-        })
-
-        if (!user) {
-            return NextResponse.json({ error: "User not found" }, { status: 404 })
+        const userId = await request.json()
+        if(!userId) {
+            return NextResponse.json ({ error: "Unauthorized"}, { status: 401 })
         }
 
         const body = await request.json()
@@ -61,7 +42,7 @@ export async function POST(request: NextRequest) {
         const budget = await prisma.budget.create({
             data: {
                 ...validatedData,
-                userId: user.id,
+                userId,
             },
             include: {
                 pengeluaran: true

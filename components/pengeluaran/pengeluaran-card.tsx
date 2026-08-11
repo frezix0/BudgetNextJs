@@ -37,7 +37,7 @@ export default function PengeluaranCard({
     >
       <div>
         <h4 
-          className="text-primary-text"
+          className="text-primary"
           style={{
             fontSize: '1.125rem',
             fontWeight: '600',

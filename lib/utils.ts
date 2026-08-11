@@ -25,25 +25,18 @@ export function sortPengeluaran(
 ): Pengeluaran[] {
     const [field, order] = sortBy.split("|") as [string, "asc" | "desc"]
 
-    return pengeluaran.sort((a, b) => {
-        let aValue: any
-        let bValue: any
-
-        if (field === "jumlah") {
-            aValue = Number(a.jumlah)
-            bValue = Number(b.jumlah)
-        } else if (field === "tanggal") {
-            aValue = new Date(a.tanggal).getTime()
-            bValue = new Date(b.tanggal).getTime()
-        } else if (field === "namaPengeluaran") {
-            aValue = a.namaPengeluaran.toLowerCase()
-            bValue = b.namaPengeluaran.toLowerCase()
-        }
-
-        if (order === "asc") {
-            return aValue > bValue ? 1 : -1
-        } else {
-            return aValue < bValue ? 1 : -1
-        }
+    const direction = order === "asc" ? 1 : -1
+ 
+    const getValue = (p: Pengeluaran): number | string => {
+        if (field === "jumlah") return Number(p.jumlah)
+        if (field === "tanggal") return new Date(p.tanggal).getTime()
+        return p.namaPengeluaran.toLowerCase()
+    }
+ 
+    return [...pengeluaran].sort((a, b) => {
+        const aValue = getValue(a)
+        const bValue = getValue(b)
+        if (aValue === bValue) return 0
+        return aValue > bValue ? direction : -direction
     })
 }

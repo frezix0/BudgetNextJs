@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
-import { BudgetFormData } from "@/types/budget"
+import { BudgetFormData, BudgetWithPengeluaran } from "@/types/budget"
 import { useNotification } from "./use-notification"
 import { useRouter } from "next/navigation"
 
@@ -8,7 +8,7 @@ export function useBudgets() {
   const { showNotification } = useNotification()
   const router = useRouter()
 
-  const { data: budgets, isLoading } = useQuery<any[]>({
+  const { data: budgets, isLoading } = useQuery<BudgetWithPengeluaran[]>({
     queryKey: ["budgets"],
     queryFn: async () => {
       const res = await fetch("/api/budgets")
